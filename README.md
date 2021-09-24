@@ -1,4 +1,4 @@
-# Simple sample Flask App with Google Login
+# SMTP feito seguinto o tutorial https://www.youtube.com/watch?v=umvzsQLZYD4&t=820s
 
-For documentation check out:
-https://www.youtube.com/watch?v=FKgJEfrhU1E
+
+# login com google feito em https://www.youtube.com/watch?v=FKgJEfrhU1E

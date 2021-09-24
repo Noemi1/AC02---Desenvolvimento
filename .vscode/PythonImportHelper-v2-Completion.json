@@ -1,0 +1,260 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "pathlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "auth",
+        "importPath": "google",
+        "description": "google",
+        "isExtraImport": true,
+        "detail": "google",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "session",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "abort",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "id_token",
+        "importPath": "google.oauth2",
+        "description": "google.oauth2",
+        "isExtraImport": true,
+        "detail": "google.oauth2",
+        "documentation": {}
+    },
+    {
+        "label": "Flow",
+        "importPath": "google_auth_oauthlib.flow",
+        "description": "google_auth_oauthlib.flow",
+        "isExtraImport": true,
+        "detail": "google_auth_oauthlib.flow",
+        "documentation": {}
+    },
+    {
+        "label": "cachecontrol",
+        "importPath": "pip._vendor",
+        "description": "pip._vendor",
+        "isExtraImport": true,
+        "detail": "pip._vendor",
+        "documentation": {}
+    },
+    {
+        "label": "google.auth.transport.requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "google.auth.transport.requests",
+        "description": "google.auth.transport.requests",
+        "detail": "google.auth.transport.requests",
+        "documentation": {}
+    },
+    {
+        "label": "smtplib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "smtplib",
+        "description": "smtplib",
+        "detail": "smtplib",
+        "documentation": {}
+    },
+    {
+        "label": "MIMEMultipart",
+        "importPath": "email.mime.multipart",
+        "description": "email.mime.multipart",
+        "isExtraImport": true,
+        "detail": "email.mime.multipart",
+        "documentation": {}
+    },
+    {
+        "label": "MIMEText",
+        "importPath": "email.mime.text",
+        "description": "email.mime.text",
+        "isExtraImport": true,
+        "detail": "email.mime.text",
+        "documentation": {}
+    },
+    {
+        "label": "login_is_required",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def login_is_required(function):\n    def wrapper(*args, **kwargs):\n        if \"google_id\" not in session:\n            return abort(401)  # Authorization required\n        else:\n            return function()\n    return wrapper\n@app.route(\"/login\")\ndef login():\n    authorization_url, state = flow.authorization_url()",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "login",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def login():\n    authorization_url, state = flow.authorization_url()\n    session[\"state\"] = state\n    return redirect(authorization_url)\n@app.route(\"/callback\")\ndef callback():\n    flow.fetch_token(authorization_response=request.url)\n    if not session[\"state\"] == request.args[\"state\"]:\n        abort(500)  # State does not match!\n    credentials = flow.credentials",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "callback",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def callback():\n    flow.fetch_token(authorization_response=request.url)\n    if not session[\"state\"] == request.args[\"state\"]:\n        abort(500)  # State does not match!\n    credentials = flow.credentials\n    request_session = requests.session()\n    cached_session = cachecontrol.CacheControl(request_session)\n    token_request = google.auth.transport.requests.Request(session=cached_session)\n    id_info = id_token.verify_oauth2_token(\n        id_token=credentials._id_token,",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "logout",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def logout():\n    sendEmail(session['name'], 'logout')\n    session.clear()\n    return redirect(\"/\")\n@app.route(\"/\")\ndef index():\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('index.html', auth=authenticate)\n@app.route(\"/profile\")\n@login_is_required",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "index",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def index():\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('index.html', auth=authenticate)\n@app.route(\"/profile\")\n@login_is_required\ndef protected_area():\n    name = session['name']\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('profile.html', name=name, auth=authenticate)\ndef sendEmail(nome, acao):",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "protected_area",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def protected_area():\n    name = session['name']\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('profile.html', name=name, auth=authenticate)\ndef sendEmail(nome, acao):\n    host = 'smtp.gmail.com'\n    port = '587'\n    login = 'madarah.impacta@gmail.com'\n    senha = 'ABCdef123-+.'\n    server = smtplib.SMTP(host, port)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "sendEmail",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def sendEmail(nome, acao):\n    host = 'smtp.gmail.com'\n    port = '587'\n    login = 'madarah.impacta@gmail.com'\n    senha = 'ABCdef123-+.'\n    server = smtplib.SMTP(host, port)\n    server.ehlo()\n    server.starttls()\n    server.login(login, senha)\n    body = f'Você fez {acao} com {nome}'",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app = Flask(__name__, template_folder='templates', static_folder='static')\napp.secret_key = \"CodeSpecialist.com\"\nos.environ[\"OAUTHLIB_INSECURE_TRANSPORT\"] = \"1\"\nGOOGLE_CLIENT_ID = \"255715985919-6rjumhu5881vldgqdkjh7i558o7h3cso.apps.googleusercontent.com\"\nclient_secrets_file = os.path.join(pathlib.Path(__file__).parent, \"client_secret.json\")\nflow = Flow.from_client_secrets_file(\n    client_secrets_file=client_secrets_file,\n    scopes=[\"https://www.googleapis.com/auth/userinfo.profile\", \"https://www.googleapis.com/auth/userinfo.email\", \"openid\"],\n    redirect_uri=\"http://127.0.0.1:5000/callback\"\n)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app.secret_key",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app.secret_key = \"CodeSpecialist.com\"\nos.environ[\"OAUTHLIB_INSECURE_TRANSPORT\"] = \"1\"\nGOOGLE_CLIENT_ID = \"255715985919-6rjumhu5881vldgqdkjh7i558o7h3cso.apps.googleusercontent.com\"\nclient_secrets_file = os.path.join(pathlib.Path(__file__).parent, \"client_secret.json\")\nflow = Flow.from_client_secrets_file(\n    client_secrets_file=client_secrets_file,\n    scopes=[\"https://www.googleapis.com/auth/userinfo.profile\", \"https://www.googleapis.com/auth/userinfo.email\", \"openid\"],\n    redirect_uri=\"http://127.0.0.1:5000/callback\"\n)\ndef login_is_required(function):",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"OAUTHLIB_INSECURE_TRANSPORT\"]",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "os.environ[\"OAUTHLIB_INSECURE_TRANSPORT\"] = \"1\"\nGOOGLE_CLIENT_ID = \"255715985919-6rjumhu5881vldgqdkjh7i558o7h3cso.apps.googleusercontent.com\"\nclient_secrets_file = os.path.join(pathlib.Path(__file__).parent, \"client_secret.json\")\nflow = Flow.from_client_secrets_file(\n    client_secrets_file=client_secrets_file,\n    scopes=[\"https://www.googleapis.com/auth/userinfo.profile\", \"https://www.googleapis.com/auth/userinfo.email\", \"openid\"],\n    redirect_uri=\"http://127.0.0.1:5000/callback\"\n)\ndef login_is_required(function):\n    def wrapper(*args, **kwargs):",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "GOOGLE_CLIENT_ID",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "GOOGLE_CLIENT_ID = \"255715985919-6rjumhu5881vldgqdkjh7i558o7h3cso.apps.googleusercontent.com\"\nclient_secrets_file = os.path.join(pathlib.Path(__file__).parent, \"client_secret.json\")\nflow = Flow.from_client_secrets_file(\n    client_secrets_file=client_secrets_file,\n    scopes=[\"https://www.googleapis.com/auth/userinfo.profile\", \"https://www.googleapis.com/auth/userinfo.email\", \"openid\"],\n    redirect_uri=\"http://127.0.0.1:5000/callback\"\n)\ndef login_is_required(function):\n    def wrapper(*args, **kwargs):\n        if \"google_id\" not in session:",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "client_secrets_file",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "client_secrets_file = os.path.join(pathlib.Path(__file__).parent, \"client_secret.json\")\nflow = Flow.from_client_secrets_file(\n    client_secrets_file=client_secrets_file,\n    scopes=[\"https://www.googleapis.com/auth/userinfo.profile\", \"https://www.googleapis.com/auth/userinfo.email\", \"openid\"],\n    redirect_uri=\"http://127.0.0.1:5000/callback\"\n)\ndef login_is_required(function):\n    def wrapper(*args, **kwargs):\n        if \"google_id\" not in session:\n            return abort(401)  # Authorization required",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "flow",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "flow = Flow.from_client_secrets_file(\n    client_secrets_file=client_secrets_file,\n    scopes=[\"https://www.googleapis.com/auth/userinfo.profile\", \"https://www.googleapis.com/auth/userinfo.email\", \"openid\"],\n    redirect_uri=\"http://127.0.0.1:5000/callback\"\n)\ndef login_is_required(function):\n    def wrapper(*args, **kwargs):\n        if \"google_id\" not in session:\n            return abort(401)  # Authorization required\n        else:",
+        "detail": "app",
+        "documentation": {}
+    }
+]

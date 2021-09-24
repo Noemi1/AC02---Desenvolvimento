@@ -1,19 +1,25 @@
 import os
 import pathlib
+from google import auth
 
 import requests
-from flask import Flask, session, abort, redirect, request
+from flask import Flask, session, abort, redirect, request, render_template
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 
-app = Flask("Google Login App")
+import smtplib 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = "CodeSpecialist.com"
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
-GOOGLE_CLIENT_ID = "33674737284-srfbp7srvi8ie2m0sr426fved0hjq2tp.apps.googleusercontent.com"
+GOOGLE_CLIENT_ID = "255715985919-6rjumhu5881vldgqdkjh7i558o7h3cso.apps.googleusercontent.com"
 client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
 
 flow = Flow.from_client_secrets_file(
@@ -60,24 +66,58 @@ def callback():
 
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
-    return redirect("/protected_area")
+    session["email"] = id_info.get("email")
+    sendEmail(session['name'], 'login')
+    return redirect("/profile")
 
 
 @app.route("/logout")
 def logout():
+    sendEmail(session['name'], 'logout')
     session.clear()
     return redirect("/")
 
 
 @app.route("/")
 def index():
-    return "Hello World <a href='/login'><button>Login</button></a>"
+    authenticate =  session['name'] if 'google_id' in session else False
+    return render_template('index.html', auth=authenticate)
 
 
-@app.route("/protected_area")
+@app.route("/profile")
 @login_is_required
 def protected_area():
-    return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"
+    name = session['name']
+    authenticate =  session['name'] if 'google_id' in session else False
+    return render_template('profile.html', name=name, auth=authenticate)
+
+def sendEmail(nome, acao):
+    host = 'smtp.gmail.com'
+    port = '587'
+    login = 'madarah.impacta@gmail.com'
+    senha = 'ABCdef123-+.'
+
+    server = smtplib.SMTP(host, port)
+    server.ehlo()
+    server.starttls()
+    server.login(login, senha)
+
+    body = f'Você fez {acao} com {nome}'
+    subject = 'AC02 - Madarah SPTM'
+
+    email_msg = MIMEMultipart()
+    email_msg['From'] = login
+    email_msg['To'] = 'calmeida.no@gmail.com'
+    email_msg['Subject'] = subject
+    email_msg.attach(MIMEText(body, 'Plain'))
+
+
+    server.sendmail(
+        email_msg['From'],
+        email_msg['To'],
+        email_msg.as_string()
+    )
+    server.quit()
 
 
 if __name__ == "__main__":
