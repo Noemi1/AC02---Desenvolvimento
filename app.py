@@ -67,13 +67,13 @@ def callback():
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
     session["email"] = id_info.get("email")
-    sendEmail(session['name'], 'login')
+    sendEmail(session['name'],session['email'], 'login')
     return redirect("/profile")
 
 
 @app.route("/logout")
 def logout():
-    sendEmail(session['name'], 'logout')
+    sendEmail(session['name'],session['email'], 'logout')
     session.clear()
     return redirect("/")
 
@@ -91,7 +91,7 @@ def protected_area():
     authenticate =  session['name'] if 'google_id' in session else False
     return render_template('profile.html', name=name, auth=authenticate)
 
-def sendEmail(nome, acao):
+def sendEmail(nome, email, acao):
     host = 'smtp.gmail.com'
     port = '587'
     login = 'madarah.impacta@gmail.com'
@@ -102,12 +102,12 @@ def sendEmail(nome, acao):
     server.starttls()
     server.login(login, senha)
 
-    body = f'Você fez {acao} com {nome}'
+    body = f'Você fez {acao} com {nome} - {email}'
     subject = 'AC02 - Madarah SPTM'
 
     email_msg = MIMEMultipart()
     email_msg['From'] = login
-    email_msg['To'] = 'calmeida.no@gmail.com'
+    email_msg['To'] = email
     email_msg['Subject'] = subject
     email_msg.attach(MIMEText(body, 'Plain'))
 

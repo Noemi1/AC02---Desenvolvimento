@@ -172,7 +172,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def logout():\n    sendEmail(session['name'], 'logout')\n    session.clear()\n    return redirect(\"/\")\n@app.route(\"/\")\ndef index():\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('index.html', auth=authenticate)\n@app.route(\"/profile\")\n@login_is_required",
+        "peekOfCode": "def logout():\n    sendEmail(session['name'],session['email'], 'logout')\n    session.clear()\n    return redirect(\"/\")\n@app.route(\"/\")\ndef index():\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('index.html', auth=authenticate)\n@app.route(\"/profile\")\n@login_is_required",
         "detail": "app",
         "documentation": {}
     },
@@ -181,7 +181,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def index():\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('index.html', auth=authenticate)\n@app.route(\"/profile\")\n@login_is_required\ndef protected_area():\n    name = session['name']\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('profile.html', name=name, auth=authenticate)\ndef sendEmail(nome, acao):",
+        "peekOfCode": "def index():\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('index.html', auth=authenticate)\n@app.route(\"/profile\")\n@login_is_required\ndef protected_area():\n    name = session['name']\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('profile.html', name=name, auth=authenticate)\ndef sendEmail(nome, email, acao):",
         "detail": "app",
         "documentation": {}
     },
@@ -190,7 +190,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def protected_area():\n    name = session['name']\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('profile.html', name=name, auth=authenticate)\ndef sendEmail(nome, acao):\n    host = 'smtp.gmail.com'\n    port = '587'\n    login = 'madarah.impacta@gmail.com'\n    senha = 'ABCdef123-+.'\n    server = smtplib.SMTP(host, port)",
+        "peekOfCode": "def protected_area():\n    name = session['name']\n    authenticate =  session['name'] if 'google_id' in session else False\n    return render_template('profile.html', name=name, auth=authenticate)\ndef sendEmail(nome, email, acao):\n    host = 'smtp.gmail.com'\n    port = '587'\n    login = 'madarah.impacta@gmail.com'\n    senha = 'ABCdef123-+.'\n    server = smtplib.SMTP(host, port)",
         "detail": "app",
         "documentation": {}
     },
@@ -199,7 +199,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def sendEmail(nome, acao):\n    host = 'smtp.gmail.com'\n    port = '587'\n    login = 'madarah.impacta@gmail.com'\n    senha = 'ABCdef123-+.'\n    server = smtplib.SMTP(host, port)\n    server.ehlo()\n    server.starttls()\n    server.login(login, senha)\n    body = f'Você fez {acao} com {nome}'",
+        "peekOfCode": "def sendEmail(nome, email, acao):\n    host = 'smtp.gmail.com'\n    port = '587'\n    login = 'madarah.impacta@gmail.com'\n    senha = 'ABCdef123-+.'\n    server = smtplib.SMTP(host, port)\n    server.ehlo()\n    server.starttls()\n    server.login(login, senha)\n    body = f'Você fez {acao} com {nome} - {email}'",
         "detail": "app",
         "documentation": {}
     },
